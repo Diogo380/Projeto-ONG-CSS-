@@ -1,0 +1,510 @@
+/* ===================================================
+   Sistema de Design e Variáveis
+   =================================================== */
+
+:root {
+    /* Paleta de Cores (8 cores min) */
+    --color-primary: #007bff;        /* Azul principal */
+    --color-primary-dark: #0056b3;
+    --color-secondary: #28a745;      /* Verde (Sucesso, Ação) */
+    --color-secondary-dark: #1e7e34;
+    --color-tertiary: #ffc107;       /* Amarelo (Alerta) */
+    --color-neutral-light: #f8f9fa;  /* Fundo claro */
+    --color-neutral-dark: #343a40;   /* Texto e Fundo Escuro */
+    --color-text-body: #495057;      /* Texto principal */
+    
+    /* Tipografia (5 tamanhos min) */
+    --font-size-base: 16px;
+    --font-size-sm: 0.875rem; /* 14px */
+    --font-size-lg: 1.25rem;  /* 20px */
+    --font-size-h1: 2.5rem;   /* 40px */
+    --font-size-h2: 2rem;     /* 32px */
+    --font-size-h3: 1.75rem;  /* 28px */
+    
+    /* Espaçamento Modular (8px base) */
+    --space-1: 0.5rem;  /* 8px */
+    --space-2: 1rem;    /* 16px */
+    --space-3: 1.5rem;  /* 24px */
+    --space-4: 2rem;    /* 32px */
+    --space-5: 3rem;    /* 48px */
+    --space-6: 4rem;    /* 64px */
+
+    /* Breakpoints */
+    --breakpoint-xs: 480px;
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+
+    /* Acessibilidade (Alto Contraste) */
+    --color-high-contrast-bg: #000000;
+    --color-high-contrast-text: #ffffff;
+}
+
+/* Base e Reset Básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: var(--font-size-base);
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--color-text-body);
+    background-color: #fff;
+    /* Acessibilidade: Garante cores de fundo e texto padrão */
+}
+
+/* ===================================================
+   Tipografia e Semântica
+   =================================================== */
+
+h1, h2, h3 {
+    color: var(--color-neutral-dark);
+    line-height: 1.2;
+    margin-bottom: var(--space-2);
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+
+p {
+    margin-bottom: var(--space-2);
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover, a:focus {
+    color: var(--color-primary-dark);
+    outline-offset: 2px; /* Acessibilidade: Focus visual */
+}
+
+/* ===================================================
+   Leiautes e Responsividade (Mobile First)
+   =================================================== */
+
+.container {
+    max-width: var(--breakpoint-xl);
+    width: 90%;
+    margin: 0 auto;
+    padding: var(--space-3) 0;
+}
+
+.section {
+    padding: var(--space-5) 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: var(--space-4);
+}
+
+/* GRID (Estrutura Principal) */
+/* Grid de 12 colunas para desktop */
+@media (min-width: var(--breakpoint-lg)) {
+    .grid-12-cols {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--space-3);
+    }
+}
+
+/* Grid de 2 Colunas para Seções */
+.grid-2-cols {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile: 1 coluna */
+    gap: var(--space-4);
+    align-items: center;
+}
+@media (min-width: var(--breakpoint-md)) {
+    .grid-2-cols {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    /* Inverte a ordem para melhor leitura em algumas seções */
+    .reverse-on-mobile {
+        grid-template-areas: "col2 col1";
+    }
+    .reverse-on-mobile > :nth-child(1) { grid-area: col1; }
+    .reverse-on-mobile > :nth-child(2) { grid-area: col2; }
+}
+
+/* Grid de 3 Colunas (Cards) */
+.grid-3-cols, .grid-card-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+}
+@media (min-width: var(--breakpoint-sm)) {
+    .grid-3-cols {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+@media (min-width: var(--breakpoint-md)) {
+    .grid-card-layout {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ===================================================
+   Navegação e Componentes (Flexbox e Interatividade)
+   =================================================== */
+
+.header {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: var(--space-2) 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+}
+
+/* Menu Mobile (Padrão) */
+.main-nav {
+    /* Esconde o menu por padrão no mobile */
+    display: none; 
+    width: 100%;
+    position: absolute;
+    top: 100%; /* Abaixo do header */
+    left: 0;
+    background-color: white;
+    border-top: 1px solid var(--color-neutral-light);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.main-nav.is-open {
+    display: block; /* Mostra quando a classe 'is-open' é adicionada via JS */
+}
+
+.nav-list {
+    list-style: none;
+    padding: var(--space-2);
+}
+
+.nav-item a {
+    display: block;
+    padding: var(--space-2) 0;
+    color: var(--color-neutral-dark);
+}
+
+.menu-toggler {
+    /* Botão Hambúrguer */
+    background: none;
+    border: none;
+    padding: var(--space-1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 24px;
+}
+.menu-toggler .icon-bar {
+    width: 24px;
+    height: 3px;
+    background-color: var(--color-primary);
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+/* Menu Desktop */
+@media (min-width: var(--breakpoint-md)) {
+    .menu-toggler {
+        display: none;
+    }
+    
+    .main-nav {
+        display: block;
+        position: static;
+        width: auto;
+        border: none;
+        box-shadow: none;
+    }
+
+    .nav-list {
+        display: flex;
+        padding: 0;
+        align-items: center;
+        gap: var(--space-3);
+    }
+
+    .nav-item a {
+        padding: var(--space-1);
+    }
+    
+    /* Dropdown */
+    .has-dropdown {
+        position: relative;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        min-width: 150px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        list-style: none;
+        padding: var(--space-1) 0;
+        z-index: 10;
+    }
+
+    .has-dropdown:hover .dropdown-menu,
+    .has-dropdown:focus-within .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-menu li a {
+        padding: var(--space-1) var(--space-2);
+    }
+}
+
+/* Botões */
+.btn {
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--color-primary-dark);
+    color: white; /* Garante alto contraste */
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: white;
+}
+.btn-secondary:hover, .btn-secondary:focus {
+    background-color: var(--color-secondary-dark);
+    color: white;
+}
+
+.btn-large {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-size-lg);
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-primary);
+}
+
+/* Cards (Para Projetos) */
+.card {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex; /* Flexbox para estrutura interna */
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card-media img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: var(--space-3);
+    flex-grow: 1; /* Garante que o conteúdo ocupe o espaço disponível */
+}
+
+/* Badges (Tags de Categorização) */
+.badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    border-radius: 4px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    margin-right: var(--space-1);
+    margin-bottom: var(--space-2);
+}
+.badge-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+.badge-secondary {
+    background-color: var(--color-secondary);
+    color: white;
+}
+
+/* ===================================================
+   Estilização de Formulários (Feedback Visual)
+   =================================================== */
+
+.form {
+    background-color: var(--color-neutral-light);
+    padding: var(--space-4);
+    border-radius: 8px;
+}
+.container-small {
+    max-width: 600px;
+}
+
+.form-group {
+    margin-bottom: var(--space-3);
+}
+
+.form-group-half {
+    width: 100%; /* Mobile: full width */
+}
+
+@media (min-width: var(--breakpoint-sm)) {
+    /* Organiza lado a lado */
+    .form fieldset > .form-group-half:nth-child(even) {
+        float: right;
+        width: 48%;
+    }
+    .form fieldset > .form-group-half:nth-child(odd) {
+        float: left;
+        width: 48%;
+    }
+    .form fieldset {
+        overflow: auto; /* Para limpar o float */
+        margin-bottom: var(--space-4);
+    }
+}
+
+.form label {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-weight: 600;
+}
+
+.form input:not([type="checkbox"]):not([type="radio"]), 
+.form select, 
+.form textarea {
+    width: 100%;
+    padding: var(--space-2);
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: var(--font-size-base);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form input:focus, .form select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Estilização para Validação (JS adiciona classes) */
+.form-group.is-invalid input, 
+.form-group.is-invalid select {
+    border-color: #dc3545; /* Vermelho */
+}
+
+.form-group.is-valid input, 
+.form-group.is-valid select {
+    border-color: var(--color-secondary); /* Verde */
+}
+
+.feedback-message {
+    display: block;
+    font-size: var(--font-size-sm);
+    margin-top: 4px;
+    color: #dc3545;
+}
+
+/* ===================================================
+   Modais (Feedback)
+   =================================================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: var(--space-4);
+    border-radius: 8px;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-close-btn {
+    margin-top: var(--space-3);
+}
+
+/* ===================================================
+   Acessibilidade (Modo Alto Contraste)
+   =================================================== */
+
+body.high-contrast {
+    background-color: var(--color-high-contrast-bg);
+    color: var(--color-high-contrast-text);
+}
+
+body.high-contrast .header,
+body.high-contrast .modal-content,
+body.high-contrast .form {
+    background-color: var(--color-high-contrast-bg);
+    border: 3px solid var(--color-high-contrast-text);
+}
+
+body.high-contrast h1, 
+body.high-contrast h2, 
+body.high-contrast h3,
+body.high-contrast a,
+body.high-contrast .nav-item a,
+body.high-contrast .card-title,
+body.high-contrast .form label {
+    color: var(--color-high-contrast-text);
+}
+
+body.high-contrast .btn-primary,
+body.high-contrast .btn-secondary {
+    background-color: var(--color-high-contrast-text);
+    color: var(--color-high-contrast-bg);
+    border-color: var(--color-high-contrast-text);
+}
+/* ... Mais regras de contraste ... */
